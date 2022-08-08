@@ -1,5 +1,5 @@
 from player import HumanPlayer
-from player import RandomComputerPlayer
+from player import RandomComputerPlayer, GeniusComputerPlayer
 import time
 
 class TicTacTow:
@@ -83,19 +83,30 @@ def play(game, x_player,o_player,print_game = True):
 
             if game.current_winner:
                 if print_game:
-                    print(letter + 'wins!')
+                    print(letter + ' wins!')
                 return letter
 
             # Alternate letters
             letter = 'O' if letter == 'X' else 'X'
-
-        time.sleep(0.8)
+        if print_game:
+            time.sleep(0.8)
 
     if print_game:
         print('It\'s a tie!')
 
 if __name__ == '__main__':
-    x_player = HumanPlayer('X')
-    o_player = RandomComputerPlayer('O')
-    t = TicTacTow()
-    play(t, x_player,o_player,print_game=True)
+    x_wins, o_wins, ties = 0,0,0
+    # x_player = HumanPlayer('X')
+    for _ in range(100):
+        x_player = RandomComputerPlayer('O')
+        o_player = GeniusComputerPlayer('O')
+        t = TicTacTow()
+        result = play(t, x_player,o_player,print_game=False)
+        if result == 'X':
+            x_wins += 1
+        elif result == 'O':
+            o_wins += 1
+        else:
+            ties += 1
+
+    print(f'After {_} iterations {x_wins} X wins, {o_wins} O wins, {ties} ties. Dam Genius!')
